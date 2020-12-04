@@ -17,7 +17,7 @@ namespace s3d
   std::tuple<int, int, int> RGBTexture(const rs2::video_frame& texture, const rs2::texture_coordinate& textureXY);
   WSPointCloudPtr ConvertRSPointToPCLPoint(const rs2::points& points, const rs2::frame& f);
   WSPointCloudPtr FilterPCLPoint(const WSPointCloudPtr cloud, float leafSize);
-  WSPointCloudPtr CropPCLPoint(const WSPointCloudPtr cloud, const ViewFrame& vFrame);
+  WSPointCloudPtr CropPCLPoint(const WSPointCloudPtr cloud, const double* vFrame);
   WSPointCloudPtr TransformPCLPoint(const WSPointCloudPtr cloud, Eigen::Affine3f transform);
   WSPointCloudPtr FilterPCLPointSOR(const WSPointCloudPtr cloud, int neighbor, float thresh);
   pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr SmoothPCLPoint(const WSPointCloudPtr cloud, float radius);

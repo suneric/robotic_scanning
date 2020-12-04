@@ -18,8 +18,6 @@
 using namespace s3d;
 using namespace std;
 
-const string rootPath = "/home/yufeng/catkin_ws/src/robotic_scan/";
-
 bool bStopIIWA = false;
 void IIWARobotCallBack() { bStopIIWA = true;}
 void MoveIIWAtoPosition(JointPositionCmd* jpCmd, const iiwa_msgs::JointPosition& pos, double tSleep)
@@ -44,7 +42,7 @@ void MoveIIWAtoPosition(JointPositionCmd* jpCmd, const iiwa_msgs::JointPosition&
 
 void PrintHelp();
 bool UserInput();
-int ParseArguments(int argc, char** argv, std::string& file, std::string& viewMesh, int& imageCount, double& timeDuration);
+int ParseArguments(int argc, char** argv, std::string& file, std::string& dir, double* viewFrame, int& imageCount, double& timeDuration);
 void ViewPointCloud(const std::string& strFile, double timeDuration);
 // void Calibration(const std::string& file, int count, const Eigen::Affine3f& toolTrans, const ViewFrame& vFrame);
 
@@ -53,9 +51,16 @@ int main(int argc, char** argv) try
 {
   std::string strFile("");
   std::string dir = "";
+  double vFrame[6];
+  vFrame[0] = -0.5; // x
+  vFrame[1] = 0.5;  // x
+  vFrame[2] = -0.5; // y
+  vFrame[3] = 0.5; // y
+  vFrame[4] = 0.2; // z
+  vFrame[5] = 1.2; // z
   int imageCount = 3;
   double timeDuration = 1.0; // s
-  int task = ParseArguments(argc, argv, strFile, dir, imageCount, timeDuration);
+  int task = ParseArguments(argc, argv, strFile, dir, vFrame, imageCount, timeDuration);
 
   if (task == 1) // generate trajectory
   {
@@ -95,12 +100,10 @@ int main(int argc, char** argv) try
 
     // configuration
     std::cout << "setup == " << std::to_string(imageCount) << " images will be taken at each stop" << std::endl;
-    std::string config = rootPath+"config/view_frame.txt";
-    ViewFrame vFrame = LoadConfiguration(config);
     std::cout << "setup == load view frame (w/h/d): ["
-      << vFrame.width[0] << ", " << vFrame.width[1] << ", "
-      << vFrame.height[0] << ", " << vFrame.height[1] << ", "
-      << vFrame.depth[0] << ", " << vFrame.depth[1] << "]\n";
+      << vFrame[0] << ", " << vFrame[1] << ", "
+      << vFrame[2] << ", " << vFrame[3] << ", "
+      << vFrame[4] << ", " << vFrame[5] << "]\n";
 
     // trajectory
     Trajectory t;
@@ -232,7 +235,7 @@ bool UserInput()
   return setLoopFlag;
 }
 
-int ParseArguments(int argc, char** argv, std::string& file, std::string& dir, int& imageCount, double& timeDuration)
+int ParseArguments(int argc, char** argv, std::string& file, std::string& dir, double* viewFrame, int& imageCount, double& timeDuration)
 {
   // 1 for creating trajectory
   // 2 for scanning
@@ -246,10 +249,19 @@ int ParseArguments(int argc, char** argv, std::string& file, std::string& dir, i
       file = std::string(argv[2]);
     if (argc > 3)
       dir = std::string(argv[3]);
-    if (argc > 4)
-      imageCount = std::stoi(argv[4]);
-    if (argc > 5)
-      timeDuration = std::stod(argv[5]);
+    if (argc > 9)
+    {
+      viewFrame[0] = std::stod(argv[4]);
+      viewFrame[1] = std::stod(argv[5]);
+      viewFrame[2] = std::stod(argv[6]);
+      viewFrame[3] = std::stod(argv[7]);
+      viewFrame[4] = std::stod(argv[8]);
+      viewFrame[5] = std::stod(argv[9]);
+    }
+    if (argc > 10)
+      imageCount = std::stoi(argv[10]);
+    if (argc > 11)
+      timeDuration = std::stod(argv[11]);
 
     std::string strArg(argv[1]);
     // generate trajectory
@@ -271,7 +283,7 @@ void PrintHelp()
 {
   std::cout << "Use this app with arguments to perform robotic scanning: \n";
   std::cout << "   Create Trajectory: cmd [-gt] [trajectory_file_path(for saving)] \n";
-  std::cout << "   Scan with Trajectory: cmd [-scan] [trajectory_file_path(for loading)] [output_dir] [image_count] [time_sleep] \n";
+  std::cout << "   Scan with Trajectory: cmd [-scan] [trajectory_file_path(for loading)] [output_dir] [view bbox] [image_count] [time_sleep] \n";
   std::cout << "   View Point Cloud: cmd [-view] [point_cloud_file]\n";
   std::cout << "   Print Help: cmd [-h|-help] \n";
   std::cout << "Note: \n if no trajectory supplied for scan, it will use a default path to demo the robotic scanning.\n";

@@ -1,5 +1,5 @@
-# scan3d
-**scan3d** is a robotic scanning system integrating with [Intel Realsense D435](https://www.intelrealsense.com/depth-camera-d435/) for 3D data acqusition, [KUKA LBR iiwa](https://www.kuka.com/en-us/products/robotics-systems/industrial-robots/lbr-iiwa) for performing 3D scanning, [ROS](https://www.ros.org/) for the communication between robotic arm and computer controller, [Point Cloud Library](http://pointclouds.org/) for 3D point cloud data processing and visualization. The system is developed in C++ on Ubuntu 16.04.
+# robotic scanning
+**robotic scanning** is a system integrating with [Intel Realsense D435](https://www.intelrealsense.com/depth-camera-d435/) for 3D data acquisition, [KUKA LBR iiwa](https://www.kuka.com/en-us/products/robotics-systems/industrial-robots/lbr-iiwa) for performing 3D scanning, [ROS](https://www.ros.org/) for the communication between robotic arm and computer controller, [Point Cloud Library](http://pointclouds.org/) for 3D point cloud data processing. The system is developed in C++ on Ubuntu 16.04.
 
 ## Pre-requisites
 - Hardware

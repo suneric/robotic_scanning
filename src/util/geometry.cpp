@@ -107,15 +107,15 @@ WSPointCloudPtr s3d::FilterPCLPointSOR(const WSPointCloudPtr cloud, int neighbor
   return sorCloud;
 }
 
-WSPointCloudPtr s3d::CropPCLPoint(const WSPointCloudPtr cloud, const ViewFrame& vFrame)
+WSPointCloudPtr s3d::CropPCLPoint(const WSPointCloudPtr cloud, const double* vFrame)
 {
   if (cloud == nullptr)
     return nullptr;
 
   WSPointCloudPtr outputCloud(new WSPointCloud());
   pcl::CropBox<WSPoint> boxFilter;
-  boxFilter.setMin(Eigen::Vector4f(vFrame.width[0], vFrame.height[0], vFrame.depth[0], 1.0));
-  boxFilter.setMax(Eigen::Vector4f(vFrame.width[1], vFrame.height[1], vFrame.depth[1], 1.0));
+  boxFilter.setMin(Eigen::Vector4f(vFrame[0], vFrame[2], vFrame[4], 1.0));
+  boxFilter.setMax(Eigen::Vector4f(vFrame[1], vFrame[3], vFrame[5], 1.0));
   boxFilter.setInputCloud(cloud);
   boxFilter.filter(*outputCloud);
 

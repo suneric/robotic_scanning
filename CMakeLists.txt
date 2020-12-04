@@ -29,7 +29,6 @@ ${OpenCV_INCLUDE_DIRS}
 
 set(TARGET_H
     src/scanner/rs_scanner.h
-    src/viewer/pcl_viewer.h
     src/util/geometry.h
     src/util/file_io.h
     src/util/config.h
@@ -46,7 +45,6 @@ set(TARGET_H
 set(TARGET_SRC
     src/scanner/rs_scanner.cpp
     src/main.cpp
-    src/viewer/pcl_viewer.cpp
     src/util/geometry.cpp
     src/util/file_io.cpp
     src/util/config.cpp
